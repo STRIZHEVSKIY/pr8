@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Вход в аккаунт</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'index' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h1>Введите данные аккаунта</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+        <p>Ещё нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>.</p>
+    </div>
+</body>
+</html>

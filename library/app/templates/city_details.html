@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в городе</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'city_list' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h1>{{ book.City }}</h1>
+        <p><strong>Температура:</strong> {{ book.Temperature }} </p>
+        <p><strong>Погода:</strong> {{ book.Weather }}</p>
+    </div>
+</body>
+</html>

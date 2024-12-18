@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Статистика</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'index' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h2>Средняя температура в городах</h2>
+        <canvas id="lineChart" width="900" height="450"></canvas>
+        <button id="downloadLineChart" type="submit">Скачать график как PNG</button>
+
+        <h2>Длина описания погоды</h2>
+        <canvas id="barChart" width="900" height="450"></canvas>
+        <button id="downloadBarChart" type="submit">Скачать график как PNG</button>
+
+        <h2>Количество символов в названии города</h2>
+        <canvas id="pieChart" width="450" height="450"></canvas>
+        <button id="downloadPieChart" type="submit">Скачать график как PNG</button>
+    </div>
+
+    <script>
+        const average_temperatures = {{ average_temperatures|safe }};
+        const weather_lens = {{ weather_lens|safe }};
+        const city_name_lens = {{ city_name_lens|safe }};
+        const temperature_ranges = {{ temperature_ranges|safe }};
+        const city_names = {{ city_names|safe }};
+
+        // График средней температуры
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: city_names,
+                datasets: [{
+                    label: 'Средняя температура',
+                    data: average_temperatures,
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // График длины описаний погоды
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: city_names,
+                datasets: [{
+                    label: 'Длина описания погоды',
+                    data: weather_lens,
+                }]
+            },
+            options: {
+                responsive: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // График количества символов в названиях городов
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['< 0', '0-9', '10-19', '> 20'],
+                datasets: [{
+                    label: 'Распределение температур',
+                    data: temperature_ranges
+                }]
+            },
+            options: {
+                responsive: false,
+            }
+        });
+
+        function downloadImage(canvas) {
+            const ctx = canvas.getContext('2d');
+            const watermark = new Image();
+            watermark.src = '{% static "watermark.png" %}';
+            watermark.onload = () => {
+                ctx.drawImage(watermark, canvas.width - watermark.width - 10, canvas.height - watermark.height - 10);
+                const imageData = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = imageData;
+                a.download = 'chart.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+        }
+
+        function resizeImage(canvas, maxWidth, maxHeight) {
+            const img = new Image();
+            img.src = canvas.toDataURL();
+            img.onload = () => {
+                const width = img.width;
+                const height = img.height;
+                const aspectRatio = width / height;
+                let newWidth = maxWidth;
+                let newHeight = maxHeight;
+
+                if (width > height) {
+                    newHeight = maxWidth / aspectRatio;
+                } else {
+                    newWidth = maxHeight * aspectRatio;
+                }
+
+                const resizedCanvas = document.createElement('canvas');
+                resizedCanvas.width = newWidth;
+                resizedCanvas.height = newHeight;
+
+                const ctx = resizedCanvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                downloadImage(resizedCanvas);
+            };
+        }
+
+        function saveChart(chartType) {
+            const chartCanvas = document.getElementById(chartType);
+            const maxWidth = 1920;
+            const maxHeight = 1080;
+            resizeImage(chartCanvas, maxWidth, maxHeight);
+        }
+
+        document.getElementById('downloadLineChart').addEventListener('click', () => saveChart('lineChart'));
+        document.getElementById('downloadBarChart').addEventListener('click', () => saveChart('barChart'));
+        document.getElementById('downloadPieChart').addEventListener('click', () => saveChart('pieChart'));
+    </script>
+</body>
+</html>

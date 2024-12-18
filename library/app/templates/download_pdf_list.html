@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Скачать PDF файлы</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'index' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h1>Список PDF-файлов</h1>
+        <ul>
+            {% for file in files %}
+                <li><a href="{% url 'download_pdf' file.id %}">{{ file.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'upload_pdf' %}">Загрузить PDF-файл</a>
+    </div>
+</body>
+</html>

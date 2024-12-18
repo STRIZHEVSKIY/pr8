@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Доступ запрещен</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <div class="container">
+        <h1>Доступ запрещен</h1>
+        <a href="{% url 'index' %}">Вернуться на главную</a>
+    </div>
+</body>
+</html>

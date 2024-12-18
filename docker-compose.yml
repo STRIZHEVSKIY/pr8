@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    volumes:
+      - ./library:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=library.settings
+
+volumes:
+  sqlite_data:

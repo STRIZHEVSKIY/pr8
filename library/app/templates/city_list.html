@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список городов</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'index' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h1>Города</h1>
+        <table border='1'>
+            <tr><th>Город</th><th>Температура</th><th>Погода</th></tr>
+            {% for book in books %}
+                <tr>
+                    <td><a href="{% url 'city_details' book.id %}">{{ book.City }}</a></td>
+                    <td>{{ book.Temperature }}</td>
+                    <td>{{ book.Weather }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

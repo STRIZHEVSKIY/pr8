@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Погода</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <div class="container">
+        <h1>Погода</h1>
+        <nav>
+            <div class="nav-buttons">
+                <a href="{% url 'register' %}" class="nav-button">Регистрация</a>
+                <a href="{% url 'login' %}" class="nav-button">Войти</a>
+                <a href="{% url 'logout' %}" class="nav-button">Выйти из аккаунта</a>
+                <a href="{% url 'city_list' %}" class="nav-button">Список городов</a>
+                <a href="{% url 'upload_pdf' %}" class="nav-button">Загрузить PDF</a>
+                <a href="{% url 'download_list' %}" class="nav-button">Скачать PDF</a>
+                <a href="{% url 'generate_fixtures' %}" class="nav-button">Генерация фикстур</a>
+                <a href="{% url 'statistics' %}" class="nav-button">Статистика</a>
+                <a href="{% url 'settings' %}" class="nav-button">Настройки</a>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

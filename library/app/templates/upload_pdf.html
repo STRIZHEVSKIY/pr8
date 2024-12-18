@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ user.lang }}">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Отправка PDF</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body class="{{ user.theme }}">
+    <a href="{% url 'index' %}" class="back-button">Назад</a>
+    <div class="container">
+        <h1>Загрузите PDF-файл</h1>
+        <form action="{% url 'upload_pdf' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="pdf_file" accept="application/pdf" required>
+            <button type="submit">Загрузить</button>
+        </form>
+        <a href="{% url 'download_list' %}">Посмотреть загруженные PDF-файлы</a>
+    </div>
+</body>
+</html>
